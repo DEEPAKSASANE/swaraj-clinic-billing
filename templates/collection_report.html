@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Daily Collection Report</title>
+
+    <style>
+        *{
+            margin:0;
+            padding:0;
+            box-sizing:border-box;
+            font-family:Arial,sans-serif;
+        }
+
+        body{
+            background:linear-gradient(135deg,#0f172a,#1e3a8a,#2563eb);
+            min-height:100vh;
+            color:white;
+        }
+
+        main{
+            width:95%;
+            max-width:1300px;
+            margin:30px auto;
+        }
+
+        h1{
+            text-align:center;
+            margin-bottom:25px;
+        }
+
+        .filter-box{
+            text-align:center;
+            margin-bottom:20px;
+        }
+
+        .filter-box input{
+            padding:10px;
+            border:none;
+            border-radius:6px;
+            margin:5px;
+        }
+
+        .filter-box button{
+            padding:10px 18px;
+            border:none;
+            border-radius:6px;
+            background:#2563eb;
+            color:white;
+            font-weight:bold;
+            cursor:pointer;
+        }
+
+        .table-box{
+            background:white;
+            border:3px solid #000;
+            border-radius:10px;
+            overflow-x:auto;
+            box-shadow:0 5px 15px rgba(0,0,0,0.3);
+        }
+
+        table{
+            width:100%;
+            border-collapse:separate;
+            border-spacing:0;
+            background:white;
+            color:black;
+        }
+
+        th{
+            background:#2563eb !important;
+            color:white !important;
+            padding:12px;
+            text-align:center;
+            border-right:2px solid #000 !important;
+            border-bottom:2px solid #000 !important;
+        }
+
+        td{
+            background:white !important;
+            color:black !important;
+            padding:10px;
+            text-align:center;
+            border-right:2px solid #000 !important;
+            border-bottom:2px solid #000 !important;
+        }
+
+        th:last-child,
+        td:last-child{
+            border-right:none !important;
+        }
+
+        tr:hover td{
+            background:#f3f4f6 !important;
+        }
+
+        .total-row td{
+            background:#dbeafe !important;
+            font-weight:bold;
+            font-size:16px;
+            border-top:3px solid #000 !important;
+            text-align:center;
+        }
+
+        .delete-btn{
+            background:#dc2626;
+            color:white;
+            padding:6px 12px;
+            border-radius:5px;
+            text-decoration:none;
+            display:inline-block;
+        }
+
+        .delete-btn:hover{
+            background:#b91c1c;
+        }
+
+        @media(max-width:768px){
+            table{
+                min-width:1000px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+{{template "nav.html"}}
+
+<main>
+
+    <h1>Daily Collection Report</h1>
+
+    <div class="filter-box">
+        <input type="date" id="fromDate">
+        <input type="date" id="toDate">
+        <button onclick="filterByDate()">Search</button>
+        <button onclick="resetFilter()">Reset</button>
+    </div>
+
+    <div class="table-box">
+        <table>
+            <thead>
+                <tr>
+                    <th>SR No</th>
+                    <th>Date</th>
+                    <th>Total Amount</th>
+                    <th>Expense</th>
+                    <th>Reason</th>
+                    <th>Cash In Hand</th>
+                    <th>Sister Amount<br>(Cash - Expense)</th>
+                    <th>Online Amount</th>
+                    <th>Remark</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+
+            <tbody>
+            {{range $index, $c := .Collections}}
+            <tr class="collection-row"
+                data-date="{{$c.Date}}"
+                data-total="{{$c.Total}}"
+                data-expense="{{$c.Expense}}"
+                data-cash="{{$c.Cash}}"
+                data-online="{{$c.Online}}">
+
+                <td>{{add $index 1}}</td>
+                <td>{{$c.Date}}</td>
+                <td>₹{{printf "%.2f" $c.Total}}</td>
+                <td>₹{{printf "%.2f" $c.Expense}}</td>
+                <td>{{$c.Reason}}</td>
+                <td>₹{{printf "%.2f" $c.Cash}}</td>
+                <td class="sisterAmountCell">₹0.00</td>
+                <td>₹{{printf "%.2f" $c.Online}}</td>
+                <td>{{$c.Remark}}</td>
+
+                <td>
+                    <a href="/collection-delete/{{$c.ID}}"
+                       class="delete-btn"
+                       onclick="return confirm('Are you sure you want to delete this record?')">
+                       Delete
+                    </a>
+                </td>
+            </tr>
+            {{end}}
+
+            <tr class="total-row">
+                <td colspan="2">Grand Total</td>
+                <td id="grandTotal">₹{{printf "%.2f" .TotalAmount}}</td>
+                <td id="grandExpense">₹{{printf "%.2f" .TotalExpense}}</td>
+                <td>-</td>
+                <td id="grandCash">₹{{printf "%.2f" .TotalCash}}</td>
+                <td id="grandSister">₹0.00</td>
+                <td id="grandOnline">₹{{printf "%.2f" .TotalOnline}}</td>
+                <td>-</td>
+                <td>-</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+</main>
+
+<script>
+function calculateSisterAmountRows(){
+    document.querySelectorAll(".collection-row").forEach(function(row){
+        let cash = parseFloat(row.getAttribute("data-cash")) || 0;
+        let expense = parseFloat(row.getAttribute("data-expense")) || 0;
+        let sisterAmount = cash - expense;
+
+        row.querySelector(".sisterAmountCell").innerHTML =
+            "₹" + sisterAmount.toFixed(2);
+    });
+}
+
+function filterByDate(){
+    let fromDate = document.getElementById("fromDate").value;
+    let toDate = document.getElementById("toDate").value;
+
+    document.querySelectorAll(".collection-row").forEach(function(row){
+        let rowDate = row.getAttribute("data-date");
+
+        if(fromDate === "" && toDate === ""){
+            row.style.display = "";
+        }else if(fromDate !== "" && toDate !== ""){
+            row.style.display = (rowDate >= fromDate && rowDate <= toDate) ? "" : "none";
+        }else if(fromDate !== ""){
+            row.style.display = (rowDate >= fromDate) ? "" : "none";
+        }else if(toDate !== ""){
+            row.style.display = (rowDate <= toDate) ? "" : "none";
+        }
+    });
+
+    updateTotals();
+}
+
+function resetFilter(){
+    document.getElementById("fromDate").value = "";
+    document.getElementById("toDate").value = "";
+
+    document.querySelectorAll(".collection-row").forEach(function(row){
+        row.style.display = "";
+    });
+
+    updateTotals();
+}
+
+function updateTotals(){
+    let total = 0;
+    let expense = 0;
+    let cash = 0;
+    let online = 0;
+
+    document.querySelectorAll(".collection-row").forEach(function(row){
+        if(row.style.display !== "none"){
+            total += parseFloat(row.getAttribute("data-total")) || 0;
+            expense += parseFloat(row.getAttribute("data-expense")) || 0;
+            cash += parseFloat(row.getAttribute("data-cash")) || 0;
+            online += parseFloat(row.getAttribute("data-online")) || 0;
+        }
+    });
+
+    let sisterAmount = cash - expense;
+
+    document.getElementById("grandTotal").innerHTML = "₹" + total.toFixed(2);
+    document.getElementById("grandExpense").innerHTML = "₹" + expense.toFixed(2);
+    document.getElementById("grandCash").innerHTML = "₹" + cash.toFixed(2);
+    document.getElementById("grandSister").innerHTML = "₹" + sisterAmount.toFixed(2);
+    document.getElementById("grandOnline").innerHTML = "₹" + online.toFixed(2);
+}
+
+calculateSisterAmountRows();
+updateTotals();
+</script>
+
+</body>
+</html>

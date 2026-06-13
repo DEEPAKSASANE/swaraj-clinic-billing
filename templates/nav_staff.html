@@ -1,0 +1,116 @@
+{{define "nav_staff.html"}}
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Segoe UI',Arial,sans-serif;
+}
+
+.navbar{
+    position:sticky;
+    top:0;
+    z-index:999;
+    background:linear-gradient(135deg,#0f172a,#1d4ed8);
+    padding:15px 25px;
+    display:flex;
+    align-items:center;
+    gap:10px;
+    flex-wrap:wrap;
+    box-shadow:0 5px 20px rgba(0,0,0,.35);
+}
+
+.logo{
+    margin-right:auto;
+    color:white;
+}
+
+.logo h2{
+    font-size:24px;
+    margin-bottom:3px;
+}
+
+.logo p{
+    font-size:12px;
+    color:#cbd5e1;
+}
+
+.navbar a{
+    color:white;
+    text-decoration:none;
+    padding:10px 16px;
+    border-radius:10px;
+    background:rgba(255,255,255,.12);
+    font-size:14px;
+    font-weight:600;
+    transition:.3s;
+}
+
+.navbar a:hover{
+    background:white;
+    color:#1d4ed8;
+    transform:translateY(-2px);
+}
+
+.logout{
+    background:#dc2626 !important;
+}
+
+.logout:hover{
+    background:#b91c1c !important;
+    color:white !important;
+}
+
+@media(max-width:768px){
+
+    .navbar{
+        flex-direction:column;
+        align-items:stretch;
+        padding:15px;
+    }
+
+    .logo{
+        margin-bottom:10px;
+        text-align:center;
+    }
+
+    .navbar a{
+        width:100%;
+        text-align:center;
+    }
+}
+
+</style>
+
+<div class="navbar">
+
+    <div class="logo">
+        <h2>🏥 Swaraj Clinic Kalva</h2>
+        <p>Clinic Management System</p>
+    </div>
+
+    <a href="/dashboard">🏠 Dashboard</a>
+
+    <a href="/attendance/intime">🟢 Attendance In Time</a>
+
+    <a href="/attendance/outtime">🔴 Attendance Out Time</a>
+
+    <a href="/attendance-report">📋 Attendance Report</a>
+
+    <a href="/collection">💰 Daily Collection</a>
+
+    <a href="/daily-report">📋 Daily Report</a>
+
+    <a href="/form">🧾 New Invoice</a>
+
+    <a href="/print">🖨 Invoice Report</a>
+
+    <a href="/invoice-search-page">🔍 Search Invoice</a>
+
+    <a href="/logout" class="logout">🚪 Logout</a>
+
+</div>
+
+{{end}}

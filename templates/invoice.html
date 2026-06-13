@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+  <div class="top-bar">
+    <a href="/form" class="new-invoice-btn">🧾 New PT Invoice</a>
+</div>
+<head>
+  <meta charset="UTF-8">
+  <title>Invoice</title>
+  <link rel="stylesheet" href="/static/css/style.css">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+      background-color: #f5f5f5;
+    }
+.new-invoice-btn{
+    float:right;
+    background:#2563eb;
+    color:white;
+    padding:10px 20px;
+    text-decoration:none;
+    border-radius:6px;
+}
+    .invoice-box {
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 10px;
+      max-width: 800px;
+      margin: auto;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.15);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    .clinic-header,
+    .customer-details,
+    .heading,
+    .item,
+    .total {
+      border-bottom: 1px solid #eee;
+    }
+
+    .clinic-header td,
+    .customer-details td,
+    .item td,
+    .total td {
+      padding: 8px;
+      vertical-align: top;
+    }
+
+    .heading th {
+      background: #eee;
+      padding: 10px;
+      text-align: left;
+    }
+
+    .total td {
+      font-weight: bold;
+    }
+
+    .terms,
+    .custom-note,
+    .sign {
+      margin-top: 25px;
+      font-size: 12px;
+      color: #000;
+    }
+
+    @media print {
+      body {
+        background-color: white;
+      }
+
+      .invoice-box {
+        box-shadow: none;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="invoice-box">
+    <table>
+      <tr class="clinic-header">
+        <!-- <td colspan="5">
+          <strong>WELLNESS CLINIC VASHI </strong><br>
+          Address: Wellness Clinic Sector-30, Vashi Station,inorbit mall, near platform no 1 VRSCCL company,vashi
+          Mobile: 8369422482
+        </td>
+      </tr> -->
+
+        <td colspan="5">
+          <strong>WELLNESS CLINIC KALWA</strong><br>
+         Address: Swaraj Clinic Railway Station Platform No. 1 Exit, Kalwa. 
+          Mobile: 8369422482
+        </td>
+      </tr> 
+
+
+      <!--   <td colspan="5">
+          <strong>WELLNESS CLINIC BYCULLA</strong><br>
+          Address: Wellness Clinic Byculla Near Ticket Window (West)<br>
+          Mobile: 8369422482
+        </td>
+      </tr> -->
+     <tr class="customer-details">
+        <td colspan="3">
+          <strong>Bill To:</strong><br>
+          Name: {{.CustomerName}}<br>
+          Mobile: {{.Mobile}}<br>
+          Age: {{.Age}}<br>
+          Gender: {{.Gender}}<br>
+
+        </td>
+        <td colspan="2">
+          <strong>Invoice No:</strong> {{.InvoiceNo}}<br>
+          <strong>Invoice Date:</strong> {{.InvoiceDatetime}}
+        </td>
+      </tr>
+      <tr class="heading">
+        <th>No.</th>
+        <th>TEST NAME</th>
+        <th>PRICE</th>
+        <th>Discount</th>
+        <th>Total</th>
+      </tr>
+      {{range $index, $item := .Tests}}
+      <tr class="item">
+        <td>{{add $index 1}}</td>
+        <td>{{$item.TestName}}</td>
+        <td>₹{{formatFloat $item.Price}}</td>
+        <td>₹{{formatFloat $item.Discount}}</td>
+        <td>₹{{formatFloat $item.TotalAmount}}</td>
+      </tr>
+      {{end}}
+      <tr class="total">
+        <td colspan="3"></td>
+        <td><strong>TOTAL</strong></td>
+        <td><strong>₹{{formatFloat .TotalAmount}}</strong></td>
+      </tr>
+    </table>
+
+    <p><strong>Total Amount (in words):</strong><br>{{.TotalAmountWords}}</p>
+    <p class="terms"><strong>Terms and Conditions:</strong><br>
+      All disputes are subject to Maharashtra jurisdiction only.
+    </p>
+
+    <p class="custom-note">
+      <strong>Note:</strong><br>
+      We develop custom billing software. Interested parties,<br>
+      please call:📞 +91 83694 22482 &nbsp;&nbsp;&nbsp;📞 +91 82081 92987
+    </p>
+    <p class="sign">
+      Authorized Signatory<br>
+      <strong>WELLNESS CLINIC KALVA</strong>
+    </p>
+  </div>
+</body>
+
+</html>

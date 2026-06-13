@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Staff Check In</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Segoe UI',sans-serif;
+}
+
+body{
+    background:linear-gradient(135deg,#0f172a,#1e3a8a,#2563eb);
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    padding:20px;
+}
+
+.box{
+    width:100%;
+    max-width:550px;
+    background:white;
+    padding:30px;
+    border-radius:18px;
+    box-shadow:0 10px 25px rgba(0,0,0,.3);
+}
+
+h2{
+    text-align:center;
+    color:#2563eb;
+    margin-bottom:20px;
+}
+
+label{
+    display:block;
+    margin-top:12px;
+    font-weight:bold;
+    color:#111;
+}
+
+input,
+select{
+    width:100%;
+    padding:12px;
+    margin-top:5px;
+    border:1px solid #d1d5db;
+    border-radius:10px;
+}
+
+input[readonly]{
+    background:#f3f4f6;
+}
+
+button{
+    width:100%;
+    padding:14px;
+    margin-top:15px;
+    border:none;
+    border-radius:10px;
+    background:#2563eb;
+    color:white;
+    font-size:16px;
+    cursor:pointer;
+}
+
+button:hover{
+    background:#1d4ed8;
+}
+
+video,
+#preview{
+    width:100%;
+    margin-top:15px;
+    border-radius:12px;
+    background:black;
+    max-height:300px;
+    object-fit:cover;
+}
+
+#preview{
+    display:none;
+}
+
+.note{
+    margin-top:10px;
+    color:#dc2626;
+    font-size:14px;
+    text-align:center;
+    font-weight:bold;
+}
+</style>
+</head>
+
+<body>
+
+<form class="box" method="POST" action="/attendance/checkin">
+
+<h2>🟢 Staff Check In</h2>
+
+<label>Staff Name</label>
+<input type="text" name="staff_name" placeholder="Enter Staff Name" required>
+
+<label>Role</label>
+<select name="role">
+    <option>Doctor</option>
+    <option>Sister</option>
+</select>
+
+<!-- <label>Clinic Name</label>
+<select name="clinic_name">
+    <option>Kalwa</option>
+    <option>Vashi</option>
+    <option>Byculla</option>
+</select> -->
+
+<label>Date</label>
+<input type="date" name="attendance_date" id="attendance_date" readonly>
+
+<label>In Time</label>
+<input type="time" name="in_time" id="in_time" readonly>
+
+<label>Live Selfie Camera</label>
+
+<video id="camera" autoplay playsinline muted></video>
+
+<p class="note" id="cameraMsg">
+    Camera loading...
+</p>
+
+<canvas id="canvas" style="display:none;"></canvas>
+
+<button type="button" onclick="captureSelfie()">
+    📷 Capture Selfie
+</button>
+
+<img id="preview">
+
+<input type="hidden" name="selfie_data" id="selfie_data" required>
+
+<button type="submit">
+    🟢 Check In
+</button>
+
+</form>
+
+<script>
+window.onload = function(){
+
+    let now = new Date();
+
+    let h = String(now.getHours()).padStart(2,'0');
+    let m = String(now.getMinutes()).padStart(2,'0');
+
+    document.getElementById("in_time").value = h + ":" + m;
+
+    let y = now.getFullYear();
+    let mo = String(now.getMonth()+1).padStart(2,'0');
+    let d = String(now.getDate()).padStart(2,'0');
+
+    document.getElementById("attendance_date").value =
+        y + "-" + mo + "-" + d;
+
+    startCamera();
+}
+
+function startCamera(){
+
+    let cameraMsg = document.getElementById("cameraMsg");
+
+    if(!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia){
+        cameraMsg.innerText =
+            "Camera not supported. Use Chrome browser.";
+        return;
+    }
+
+    navigator.mediaDevices.getUserMedia({
+        video:{
+            facingMode:"user"
+        },
+        audio:false
+    })
+    .then(function(stream){
+        document.getElementById("camera").srcObject = stream;
+        cameraMsg.innerText = "Camera ready. Capture selfie.";
+        cameraMsg.style.color = "green";
+    })
+    .catch(function(error){
+        console.log(error);
+
+        cameraMsg.innerText =
+            "Camera permission allow करा. Chrome Settings > Site Settings > Camera > Allow.";
+
+        alert("Camera permission allow करा.");
+    });
+}
+
+function captureSelfie(){
+
+    let video = document.getElementById("camera");
+    let canvas = document.getElementById("canvas");
+    let preview = document.getElementById("preview");
+
+    if(video.videoWidth === 0 || video.videoHeight === 0){
+        alert("Camera start झालेली नाही. Permission allow करा.");
+        return;
+    }
+
+    canvas.width = video.videoWidth;
+    canvas.height = video.videoHeight;
+
+    canvas.getContext("2d").drawImage(video,0,0);
+
+    let imageData = canvas.toDataURL("image/png");
+
+    document.getElementById("selfie_data").value = imageData;
+
+    preview.src = imageData;
+    preview.style.display = "block";
+
+    alert("Selfie Captured Successfully");
+}
+</script>
+
+</body>
+</html>

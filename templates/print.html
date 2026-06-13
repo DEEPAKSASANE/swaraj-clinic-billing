@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html>
+<head>
+ <div class="top-menu">
+    <a href="/dashboard" class="dashboard-btn">🏠 Dashboard</a>
+    <a href="/logout" class="logout-btn">🚪 Logout</a>
+</div>
+  <title>All Invoice & Test Summary</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+      background-color: #f5f5f5;
+    }
+.top-menu{
+    position:fixed;
+    top:20px;
+    right:20px;
+    display:flex;
+    gap:10px;
+    z-index:1000;
+}
+
+.dashboard-btn{
+    background:#2563eb;
+    color:white;
+    padding:12px 20px;
+    border-radius:8px;
+    text-decoration:none;
+    font-weight:bold;
+}
+
+.dashboard-btn:hover{
+    background:#1d4ed8;
+}
+
+.logout-btn{
+    background:#dc2626;
+    color:white;
+    padding:12px 20px;
+    border-radius:8px;
+    text-decoration:none;
+    font-weight:bold;
+}
+
+.logout-btn:hover{
+    background:#b91c1c;
+}
+.print-btn button:hover{
+    background:#15803d;
+}
+.print-btn button{
+    background:#16a34a;
+    color:white;
+    border:none;
+    padding:12px 25px;
+    border-radius:8px;
+    cursor:pointer;
+    font-size:16px;
+    font-weight:bold;
+}
+.print-btn{
+    text-align:center;
+    margin-top:20px;
+}
+
+.print-btn button:hover{
+    background:#15803d;
+}
+
+    h2 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    .filter-form {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+    .filter-form label {
+      margin: 0 10px;
+    }
+    .filter-form input {
+      padding: 5px;
+      margin-right: 10px;
+    }
+    .filter-form button {
+      padding: 5px 15px;
+      background-color: #ce1515;
+      color: #fff;
+      border: none;
+      cursor: pointer;
+    }
+    .filter-form button:hover {
+      background-color: #0edd2a;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: white;
+    }
+    th, td {
+      border: 1px solid #ccc;
+      padding: 10px;
+      text-align: center;
+    }
+    th {
+      background-color: #0630ee;
+      color: #fff;
+    }
+    tfoot td {
+      font-weight: bold;
+    }
+    .no-data {
+      text-align: center;
+      font-style: italic;
+      color: #999;
+      margin-top: 40px;
+      font-size: 16px;
+    }
+  </style>
+</head>
+<body>
+
+  <h2>All Invoice & Test Summary</h2>
+
+  <!-- Date Filter Form -->
+  <form method="GET" action="/filter-invoices" class="filter-form">
+    <label>Start Date:
+      <input type="date" name="start" required>
+    </label>
+    <label>End Date:
+      <input type="date" name="end" required>
+    </label>
+    <button type="submit">Filter</button>
+    <p><a href="/print">Show All Invoices</a></p>
+  </form>
+
+  <!-- Full Invoice + Test Details -->
+  {{ if .Data }}
+  <table>
+    <thead>
+      <tr>
+        <th>Sr No</th>
+        <th>Invoice ID</th>
+        <th>Customer Name</th>
+        <th>Age</th>
+        <th>Mobile No</th>
+        <th>Created At</th>
+        <th>Test Name</th>
+        <th>Price (₹)</th>
+        <th>Discount (₹)</th>
+        <th>Total Amount (₹)</th>
+        <th>Total Amount (Words)</th>
+      </tr>
+    </thead>
+    <tbody>
+      {{ range .Data }}
+      <tr>
+        <td>{{ .SrNo }}</td>
+        <td>{{ .InvoiceID }}</td>
+        <td>{{ .CustomerName }}</td>
+        <td>{{ .Age }}</td>
+        <td>{{ .MobileNo }}</td>
+        <td>{{ .CreatedAt.Format "2006-01-02 15:04:05" }}</td>
+        <td>{{ .TestName }}</td>
+        <td>{{ printf "%.2f" .Price }}</td>
+        <td>{{ printf "%.2f" .Discount }}</td>
+        <td>{{ printf "%.2f" .TotalAmount }}</td>
+        <td>{{ .TotalAmountWords }}</td>
+      </tr>
+      {{ end }}
+    </tbody>
+    <tfoot>
+      <tr>
+        <td colspan="9" style="text-align: right;">Grand Total (₹):</td>
+        <td colspan="1">₹{{ printf "%.2f" .GrandTotal }}</td>
+      </tr>
+    </tfoot>
+  </table>
+
+  <!-- Filtered Summary View -->
+  {{ else if .Summaries }}
+  <table>
+    <thead>
+      <tr>
+        <th>Sr No</th>
+        <th>Invoice ID</th>
+        <th>Customer Name</th>
+        <th>Age</th>
+        <th>Mobile No</th>
+        <th>Created At</th>
+        <th>Total Amount (₹)</th>
+      </tr>
+    </thead>
+    <tbody>
+      {{ range .Summaries }}
+      <tr>
+        <td>{{ .SrNo }}</td>
+        <td>{{ .InvoiceID }}</td>
+        <td>{{ .CustomerName }}</td>
+        <td>{{ .Age }}</td>
+        <td>{{ .MobileNo }}</td>
+        <td>{{ .CreatedAt.Format "2006-01-02 15:04:05" }}</td>
+        <td>{{ printf "%.2f" .TotalAmountSum }}</td>
+      </tr>
+      {{ end }}
+    </tbody>
+    <tfoot>
+      <tr>
+        <td colspan="6" style="text-align: right;">Grand Total (₹):</td>
+        <td>₹{{ printf "%.2f" .GrandTotal }}</td>
+      </tr>
+    </tfoot>
+  </table>
+
+  <!-- No Data Fallback -->
+  {{ else }}
+    <p class="no-data">No data available.</p>
+  {{ end }}
+<div class="print-btn">
+
+    <button onclick="window.print()">
+        🖨 Print Report
+    </button>
+
+</div>
+
+</body>
+</html>

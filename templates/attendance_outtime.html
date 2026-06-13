@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Staff Check Out</title>
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI',sans-serif}
+
+body{
+    background:linear-gradient(135deg,#0f172a,#1e3a8a,#2563eb);
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    padding:20px;
+}
+
+.container{width:100%;max-width:550px}
+
+.card{
+    background:#fff;
+    border-radius:18px;
+    padding:30px;
+    box-shadow:0 10px 30px rgba(0,0,0,.3);
+}
+
+.title{
+    text-align:center;
+    color:#dc2626;
+    margin-bottom:25px;
+    font-size:28px;
+}
+
+label{
+    display:block;
+    margin-top:15px;
+    margin-bottom:5px;
+    font-weight:600;
+    color:#111827;
+}
+
+input,select{
+    width:100%;
+    padding:12px;
+    border:1px solid #d1d5db;
+    border-radius:10px;
+    font-size:15px;
+}
+
+input[readonly]{background:#f3f4f6}
+
+video,img{
+    width:100%;
+    margin-top:10px;
+    border-radius:12px;
+    border:1px solid #d1d5db;
+    background:#000;
+    max-height:300px;
+    object-fit:cover;
+}
+
+.btn{
+    width:100%;
+    padding:14px;
+    margin-top:18px;
+    border:none;
+    border-radius:10px;
+    background:#dc2626;
+    color:white;
+    font-size:16px;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+.btn:hover{background:#b91c1c}
+
+.capture-btn{background:#2563eb}
+.capture-btn:hover{background:#1d4ed8}
+
+.info{
+    margin-top:15px;
+    text-align:center;
+    color:#6b7280;
+    font-size:14px;
+}
+
+.time-box{
+    margin-top:15px;
+    padding:12px;
+    background:#eff6ff;
+    border-radius:10px;
+    text-align:center;
+    color:#1d4ed8;
+    font-weight:bold;
+}
+
+.camera-msg{
+    margin-top:10px;
+    text-align:center;
+    font-size:14px;
+    color:#dc2626;
+    font-weight:bold;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<form class="card" method="POST" action="/attendance/outtime">
+
+    <h1 class="title">🔴 Staff Check Out</h1>
+
+    <label>Staff Name</label>
+    <input type="text" name="staff_name" placeholder="Enter Staff Name" required>
+
+    <label>Role</label>
+    <select name="role" required>
+        <option value="">Select Role</option>
+        <option value="Doctor">Doctor</option>
+        <option value="Sister">Sister</option>
+    </select>
+
+    <!-- <label>Clinic Name</label>
+    <select name="clinic_name" required>
+        <option value="Kalwa">Kalwa</option>
+        <option value="Vashi">Vashi</option>
+        <option value="Byculla">Byculla</option>
+    </select> -->
+
+    <label>Date</label>
+    <input type="date" id="attendance_date" name="attendance_date" readonly>
+
+    <label>Out Time</label>
+    <input type="time" id="out_time" name="out_time" readonly>
+
+    <div class="time-box">Current Out Time Auto Generated</div>
+
+    <label>Out Time Selfie</label>
+
+    <video id="camera" autoplay playsinline muted></video>
+
+    <p class="camera-msg" id="cameraMsg">Camera loading...</p>
+
+    <canvas id="canvas" style="display:none;"></canvas>
+
+    <img id="preview" style="display:none;">
+
+    <input type="hidden" name="selfie_data" id="selfie_data" required>
+
+    <button type="button" class="btn capture-btn" onclick="capturePhoto()">
+        📸 Capture Selfie
+    </button>
+
+    <button class="btn" type="submit">
+        🔴 Check Out
+    </button>
+
+    <div class="info">
+        Date, Time and Selfie are automatically captured from the system.
+    </div>
+
+</form>
+
+</div>
+
+<script>
+window.onload = function(){
+    let now = new Date();
+
+    let year = now.getFullYear();
+    let month = String(now.getMonth()+1).padStart(2,'0');
+    let day = String(now.getDate()).padStart(2,'0');
+
+    document.getElementById("attendance_date").value =
+        year + "-" + month + "-" + day;
+
+    let hours = String(now.getHours()).padStart(2,'0');
+    let minutes = String(now.getMinutes()).padStart(2,'0');
+
+    document.getElementById("out_time").value =
+        hours + ":" + minutes;
+
+    startCamera();
+}
+
+function startCamera(){
+    let video = document.getElementById("camera");
+    let cameraMsg = document.getElementById("cameraMsg");
+
+    if(!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia){
+        cameraMsg.innerText = "Camera not supported. Use Chrome browser.";
+        return;
+    }
+
+    navigator.mediaDevices.getUserMedia({
+        video:{facingMode:"user"},
+        audio:false
+    })
+    .then(function(stream){
+        video.srcObject = stream;
+        cameraMsg.innerText = "Camera ready. Capture selfie.";
+        cameraMsg.style.color = "green";
+    })
+    .catch(function(error){
+        console.log(error);
+        cameraMsg.innerText =
+            "Camera permission allow करा. Chrome Settings > Site Settings > Camera > Allow.";
+        alert("Camera permission allow करा.");
+    });
+}
+
+function capturePhoto(){
+    let video = document.getElementById("camera");
+    let canvas = document.getElementById("canvas");
+    let preview = document.getElementById("preview");
+
+    if(video.videoWidth === 0 || video.videoHeight === 0){
+        alert("Camera start झालेली नाही. Permission allow करा.");
+        return;
+    }
+
+    canvas.width = video.videoWidth;
+    canvas.height = video.videoHeight;
+
+    canvas.getContext("2d").drawImage(video,0,0);
+
+    let imageData = canvas.toDataURL("image/png");
+
+    document.getElementById("selfie_data").value = imageData;
+
+    preview.src = imageData;
+    preview.style.display = "block";
+
+    alert("Selfie Captured Successfully");
+}
+</script>
+
+</body>
+</html>

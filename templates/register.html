@@ -1,0 +1,38 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Register User</title>
+<style>
+body{margin:0;background:linear-gradient(135deg,#0f172a,#1e3a8a,#2563eb);font-family:'Segoe UI',sans-serif}.box{max-width:520px;margin:35px auto;background:white;padding:30px;border-radius:16px;box-shadow:0 10px 25px rgba(0,0,0,.3)}h1{text-align:center;color:#2563eb}label{font-weight:bold;margin-top:12px;display:block}input,select{width:100%;padding:12px;margin-top:6px;border:1px solid #ccc;border-radius:8px}button{width:100%;margin-top:20px;padding:13px;border:0;border-radius:8px;background:#2563eb;color:white;font-size:17px;font-weight:bold}.error{color:red;text-align:center;font-weight:bold}
+</style>
+</head>
+<body>
+<div class="box">
+<h1>👤 Register User</h1>
+{{if .Error}}<div class="error">{{.Error}}</div>{{end}}
+<form method="POST" action="/register">
+<label>Name</label><input name="name" required>
+<label>Address</label><input name="address" required>
+<label>Mobile</label><input name="mobile" required>
+<label>Clinic / Center</label>
+<select name="clinic_name" required>
+<option value="">Select Clinic</option>
+<option value="Kalwa">Kalwa</option>
+<option value="Vashi">Vashi</option>
+<option value="Byculla">Byculla</option>
+</select>
+<label>Username</label><input name="username" required>
+<label>Password</label><input type="password" name="password" required>
+<label>Role</label>
+<select name="role" required>
+
+<option value="doctor">Doctor</option>
+<option value="sister">Sister</option>
+</select>
+<button type="submit">Register</button>
+</form>
+</div>
+</body>
+</html>

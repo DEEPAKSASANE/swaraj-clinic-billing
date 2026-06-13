@@ -1,0 +1,130 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Admin Dashboard</title>
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Segoe UI',Arial,sans-serif;
+}
+
+body{
+    background:#eef2ff;
+    min-height:100vh;
+}
+
+.wrap{
+    max-width:1200px;
+    margin:35px auto;
+    padding:20px;
+}
+
+h1{
+    text-align:center;
+    color:#1d4ed8;
+    margin-bottom:25px;
+}
+
+.cards{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(230px,1fr));
+    gap:18px;
+}
+
+.card{
+    background:white;
+    color:#111;
+    padding:28px;
+    border-radius:16px;
+    text-align:center;
+    text-decoration:none;
+    font-size:20px;
+    font-weight:bold;
+    box-shadow:0 8px 25px rgba(0,0,0,.18);
+    transition:.3s;
+}
+
+.card:hover{
+    transform:translateY(-4px);
+    background:#1d4ed8;
+    color:white;
+}
+
+</style>
+
+</head>
+
+<body>
+
+{{template "nav_admin.html" .}}
+
+<div class="wrap">
+
+    <h1>🏥 Admin Dashboard</h1>
+
+    <div class="cards">
+
+        <a class="card" href="/register">
+            👤 Register User
+        </a>
+
+        <a class="card" href="/attendance/intime">
+            🟢 attendance In_Time
+        </a>
+
+        <a class="card" href="/attendance/outtime">
+            🔴 attendance Out_Time
+        </a>
+
+        <a class="card" href="/attendance-report">
+            📋 Attendance Report
+        </a>
+
+        <a class="card" href="/form">
+            🧾 New Invoice
+        </a>
+
+        <a class="card" href="/print">
+            🖨 Invoice Report
+        </a>
+
+        <a class="card" href="/invoice-search-page">
+            🔍 Search Invoice
+        </a>
+
+        <a class="card" href="/collection">
+            💰 Daily Collection
+        </a>
+
+        <a class="card" href="/collection-report">
+            📊 Collection Report
+        </a>
+
+        <a class="card" href="/collection-deepak">
+            💵 Online Collection
+        </a>
+
+        <a class="card" href="/collection-report-deepak">
+            📈 Online Report
+        </a>
+
+        <a class="card" href="/daily-report">
+            📑 Daily Report
+        </a>
+
+        <a class="card" href="/logout">
+            🚪 Logout
+        </a>
+
+    </div>
+
+</div>
+
+</body>
+</html>

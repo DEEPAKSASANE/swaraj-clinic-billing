@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+    <title>Update Attendance</title>
+
+
+<style>
+    *{
+        margin:0;
+        padding:0;
+        box-sizing:border-box;
+        font-family:Arial,sans-serif;
+    }
+
+    body{
+        background:linear-gradient(135deg,#0f172a,#1e3a8a,#2563eb);
+        min-height:100vh;
+        display:flex;
+        justify-content:center;
+        align-items:center;
+        padding:20px;
+    }
+
+    .container{
+        width:100%;
+        max-width:700px;
+        background:white;
+        padding:30px;
+        border-radius:15px;
+        box-shadow:0 10px 25px rgba(0,0,0,0.3);
+    }
+
+    h1{
+        text-align:center;
+        color:#2563eb;
+        margin-bottom:25px;
+    }
+
+    label{
+        display:block;
+        margin-top:12px;
+        margin-bottom:5px;
+        font-weight:bold;
+        color:#333;
+    }
+
+    input,
+    select,
+    textarea{
+        width:100%;
+        padding:12px;
+        border:1px solid #ccc;
+        border-radius:8px;
+        font-size:15px;
+    }
+
+    textarea{
+        resize:none;
+        height:90px;
+    }
+
+    .update-btn{
+        width:100%;
+        margin-top:20px;
+        padding:12px;
+        border:none;
+        border-radius:8px;
+        background:#16a34a;
+        color:white;
+        font-size:16px;
+        font-weight:bold;
+        cursor:pointer;
+    }
+
+    .update-btn:hover{
+        background:#15803d;
+    }
+
+    .back-btn{
+        display:block;
+        text-align:center;
+        margin-top:15px;
+        padding:12px;
+        text-decoration:none;
+        background:#2563eb;
+        color:white;
+        border-radius:8px;
+        font-weight:bold;
+    }
+
+    .back-btn:hover{
+        background:#1d4ed8;
+    }
+</style>
+
+
+</head>
+<body>
+
+<div class="container">
+
+<h1>Update Attendance</h1>
+
+<form method="POST" action="/attendance-update/{{.ID}}">
+
+
+<label>Staff Name</label>
+<input type="text" name="staff_name" value="{{.StaffName}}" required>
+
+<label>Role</label>
+<select name="role" required>
+    <option value="Doctor" {{if eq .Role "Doctor"}}selected{{end}}>Doctor</option>
+    <option value="Sister" {{if eq .Role "Sister"}}selected{{end}}>Sister</option>
+</select>
+
+<label>Date</label>
+<input type="date" name="attendance_date" value="{{.AttendanceDate}}" required>
+
+<label>In Time</label>
+<input type="time" name="in_time" value="{{.InTime}}">
+
+<label>Out Time</label>
+<input type="time" name="out_time" value="{{.OutTime}}">
+
+<label>Status</label>
+<select name="status" required>
+    <option value="Present" {{if eq .Status "Present"}}selected{{end}}>Present</option>
+    <option value="Absent" {{if eq .Status "Absent"}}selected{{end}}>Absent</option>
+    <option value="Half Day" {{if eq .Status "Half Day"}}selected{{end}}>Half Day</option>
+</select>
+
+<label>Remark</label>
+<textarea name="remark">{{.Remark}}</textarea>
+
+<button type="submit" class="update-btn">
+    Update Attendance
+</button>
+
+
+</form>
+
+<a href="/attendance-report" class="back-btn">
+    Back To Report
+</a>
+
+</div>
+
+</body>
+</html>

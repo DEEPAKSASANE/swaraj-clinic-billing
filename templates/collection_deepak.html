@@ -1,0 +1,203 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Swaraj Clinic Kalva - Online Collection</title>
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Segoe UI',sans-serif;
+}
+
+body{
+    background:#f1f5f9;
+}
+
+.container{
+    width:650px;
+    margin:40px auto;
+    background:#fff;
+    padding:30px;
+    border-radius:20px;
+    box-shadow:0 10px 25px rgba(0,0,0,.15);
+}
+
+.title{
+    text-align:center;
+    color:#1e40af;
+    margin-bottom:20px;
+}
+
+label{
+    display:block;
+    margin-top:15px;
+    margin-bottom:5px;
+    font-weight:600;
+}
+
+input, textarea{
+    width:100%;
+    padding:12px;
+    border:2px solid #dbeafe;
+    border-radius:10px;
+    font-size:15px;
+}
+
+textarea{
+    height:80px;
+    resize:none;
+}
+
+.row{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:15px;
+}
+
+.result-box{
+    margin-top:20px;
+    background:#eff6ff;
+    padding:20px;
+    border-radius:15px;
+}
+
+.result-item{
+    display:flex;
+    justify-content:space-between;
+    margin:10px 0;
+    font-size:18px;
+    font-weight:bold;
+}
+
+.amount{
+    color:green;
+}
+
+button{
+    width:100%;
+    margin-top:20px;
+    padding:14px;
+    border:none;
+    border-radius:10px;
+    background:#2563eb;
+    color:white;
+    font-size:18px;
+    cursor:pointer;
+}
+
+button:hover{
+    background:#1d4ed8;
+}
+
+</style>
+</head>
+
+<body>
+
+{{template "nav.html" .}}
+
+<div class="container">
+
+<h2 class="title">💵 Online Collection Entry</h2>
+
+<form action="/collection-deepak" method="POST">
+
+<label>Date</label>
+<input type="date" name="collection_date" required>
+
+<div class="row">
+
+<div>
+<label>Online Amount</label>
+<input
+    type="number"
+    id="online"
+    name="online_amount"
+    value="0"
+    oninput="calculate()"
+    required>
+</div>
+
+<div>
+<label>Expense Amount</label>
+<input
+    type="number"
+    id="expense"
+    name="expense_amount"
+    value="0"
+    oninput="calculate()">
+</div>
+
+</div>
+
+<label>Remark</label>
+<textarea
+    name="remark"
+    placeholder="Enter Remark"></textarea>
+
+<div class="result-box">
+
+<div class="result-item">
+<span>Total Collection</span>
+<span id="totalCollection" class="amount">₹0.00</span>
+</div>
+
+<div class="result-item">
+<span>Final Balance</span>
+<span id="finalBalance" class="amount">₹0.00</span>
+</div>
+
+<div class="result-item">
+<span>Cash In Hand</span>
+<span id="cashInHand" class="amount">₹0.00</span>
+</div>
+
+</div>
+
+<button type="submit">
+Save Collection
+</button>
+
+</form>
+
+</div>
+
+<script>
+
+function calculate(){
+
+    let online =
+        parseFloat(document.getElementById("online").value) || 0;
+
+    let expense =
+        parseFloat(document.getElementById("expense").value) || 0;
+
+    let totalCollection = online;
+
+    let finalBalance = online - expense;
+
+    let cashInHand = online - expense;
+
+    document.getElementById("totalCollection").innerHTML =
+        "₹" + totalCollection.toFixed(2);
+
+    document.getElementById("finalBalance").innerHTML =
+        "₹" + finalBalance.toFixed(2);
+
+    document.getElementById("cashInHand").innerHTML =
+        "₹" + cashInHand.toFixed(2);
+}
+
+calculate();
+
+</script>
+
+</body>
+</html>
+

@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Swaraj EMR Kalva - Daily Report</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Segoe UI',sans-serif;
+}
+
+body{
+    background:linear-gradient(135deg,#dbeafe,#eff6ff);
+    padding:15px;
+}
+
+h1{
+    text-align:center;
+    color:#1e3a8a;
+    margin-bottom:15px;
+    font-size:24px;
+}
+
+.search-box{
+    max-width:850px;
+    margin:0 auto 15px;
+    background:#fff;
+    padding:12px;
+    border-radius:10px;
+    box-shadow:0 4px 10px rgba(0,0,0,.12);
+    text-align:center;
+}
+
+.search-box input{
+    padding:8px;
+    border:1px solid #ccc;
+    border-radius:6px;
+}
+
+.search-box button{
+    padding:8px 12px;
+    border:none;
+    border-radius:6px;
+    background:#2563eb;
+    color:white;
+    cursor:pointer;
+    margin-left:5px;
+    font-weight:bold;
+}
+
+.logout-btn{
+    background:#dc2626 !important;
+}
+
+.report-card{
+    max-width:650px;
+    margin:15px auto;
+}
+
+.info-box,
+.billing-box{
+    background:white;
+    border-radius:10px;
+    padding:14px;
+    margin-bottom:15px;
+    box-shadow:0 4px 10px rgba(0,0,0,.12);
+}
+
+.info-box h3,
+.billing-box h3{
+    text-align:center;
+    padding:8px;
+    border-radius:8px;
+    margin-bottom:12px;
+    font-size:18px;
+}
+
+.info-box h3{
+    color:#2563eb;
+    background:#dbeafe;
+    border:2px solid #2563eb;
+}
+
+.billing-box h3{
+    color:#16a34a;
+    background:#ecfdf5;
+    border:2px solid #16a34a;
+}
+
+.info-box p{
+    padding:8px;
+    border-bottom:1px solid #e5e7eb;
+    font-size:14px;
+}
+
+.item-box{
+    background:#f8fafc;
+    border-left:4px solid #2563eb;
+    border-radius:8px;
+    padding:8px 10px;
+    margin-bottom:8px;
+    box-shadow:0 2px 6px rgba(0,0,0,.08);
+}
+
+.item-box h4{
+    margin-bottom:4px;
+    font-size:14px;
+    color:#2563eb;
+}
+
+.item-box p{
+    font-size:17px;
+    font-weight:bold;
+    color:#111827;
+}
+
+.patient-box{border-left-color:#3b82f6;}
+.total-box{border-left-color:#8b5cf6;}
+.cash-box{border-left-color:#16a34a;}
+.online-box{border-left-color:#06b6d4;}
+.expense-box{border-left-color:#dc2626;}
+
+.hand-box{
+    border-left-color:#15803d;
+    background:#dcfce7;
+}
+
+.print-btn{
+    text-align:center;
+    margin-top:15px;
+}
+
+.print-btn button{
+    background:#16a34a;
+    color:white;
+    border:none;
+    padding:10px 20px;
+    border-radius:8px;
+    cursor:pointer;
+    font-size:15px;
+    font-weight:bold;
+}
+
+@media print{
+    .search-box,
+    .print-btn{
+        display:none;
+    }
+
+    body{
+        background:white;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<h1>🏥 Swaraj EMR Kalva - Daily Report</h1>
+
+<div class="search-box">
+<form action="/daily-report" method="GET">
+
+    <input type="date" name="date" value="{{.SearchDate}}">
+
+    <button type="submit">🔍 Search</button>
+
+    <a href="/daily-report">
+        <button type="button">📅 Today Report</button>
+    </a>
+
+    <a href="/logout">
+        <button type="button" class="logout-btn">🚪 Logout</button>
+    </a>
+
+</form>
+</div>
+
+{{range .Reports}}
+
+<div class="report-card">
+
+    <div class="info-box">
+        <h3>👨‍⚕️ Doctor & Sister Information</h3>
+
+        <p><b>Date :</b> {{.ReportDate}}</p>
+        <p><b>Doctor Name :</b> {{.DoctorName}}</p>
+        <p><b>Doctor In Time :</b> {{.DrInTime}}</p>
+        <p><b>Doctor Out Time :</b> {{.DrOutTime}}</p>
+        <p><b>Sister Name :</b> {{.SisterName}}</p>
+        <p><b>Sister In Time :</b> {{.SisterInTime}}</p>
+        <p><b>Sister Out Time :</b> {{.SisterOutTime}}</p>
+    </div>
+
+    <div class="billing-box">
+        <h3>💰 Billing Information</h3>
+
+        <div class="item-box patient-box">
+            <h4>👥 Total Patient</h4>
+            <p>{{.TotalPatient}}</p>
+        </div>
+
+        <div class="item-box total-box">
+            <h4>💰 Total Amount</h4>
+            <p>₹{{printf "%.2f" .TotalBilling}}</p>
+        </div>
+
+        <div class="item-box cash-box">
+            <h4>💵 Cash Amount</h4>
+            <p>₹{{printf "%.2f" .CashBilling}}</p>
+        </div>
+
+        <div class="item-box online-box">
+            <h4>📱 Card / UPI Payment</h4>
+            <p>₹{{printf "%.2f" .OnlineBilling}}</p>
+        </div>
+
+        <div class="item-box expense-box">
+            <h4>🧾 Expense</h4>
+            <p>₹{{printf "%.2f" .Expense}}</p>
+        </div>
+
+        <div class="item-box hand-box">
+            <h4>✅ Cash In Hand</h4>
+            <p>₹{{printf "%.2f" .CashInHand}}</p>
+        </div>
+    </div>
+
+</div>
+
+{{end}}
+
+<div class="print-btn">
+    <button onclick="window.print()">🖨 Print Report</button>
+</div>
+
+</body>
+</html>

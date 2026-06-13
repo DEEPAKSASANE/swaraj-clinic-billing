@@ -1,0 +1,107 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Doctor / Sister Dashboard</title>
+
+<style>
+body{
+    margin:0;
+    font-family:Arial;
+    background:linear-gradient(135deg,#0f172a,#1e3a8a,#2563eb);
+    min-height:100vh;
+    color:white;
+}
+
+.wrap{
+    max-width:1000px;
+    margin:35px auto;
+    padding:20px;
+}
+
+.cards{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+    gap:20px;
+}
+
+.card{
+    background:white;
+    color:#111;
+    padding:30px;
+    border-radius:16px;
+    text-align:center;
+    text-decoration:none;
+    font-size:20px;
+    font-weight:bold;
+    box-shadow:0 8px 25px rgba(0,0,0,.3);
+    transition:.3s;
+}
+
+.card:hover{
+    transform:translateY(-5px);
+    background:#2563eb;
+    color:white;
+}
+
+h1{
+    text-align:center;
+    margin-bottom:25px;
+}
+</style>
+</head>
+
+<body>
+
+{{template "nav_staff.html" .}}
+
+<div class="wrap">
+
+<h1>🏥 Doctor / Sister Dashboard</h1>
+
+<div class="cards">
+
+    <a class="card" href="/attendance/intime">
+        🟢 attendance In_Time
+    </a>
+
+    <a class="card" href="/attendance/outtime">
+        🔴 attendance Out_Time
+    </a>
+
+    <a class="card" href="/attendance-report">
+        📋 Attendance Report
+    </a>
+
+    <a class="card" href="/collection">
+        💰 Daily Collection
+    </a>
+
+    <a class="card" href="/form">
+        🧾 New Invoice
+    </a>
+
+    <a class="card" href="/print">
+        🖨 Invoice Report
+    </a>
+
+    <a class="card" href="/invoice-search-page">
+        🔍 Search Invoice
+    </a>
+
+    <a class="card" href="/daily-report">
+        📋 Daily Report
+    </a>
+
+    <a class="card" href="/logout">
+        🚪 Logout
+    </a>
+
+</div>
+
+</div>
+
+</body>
+</html>

@@ -1,0 +1,36 @@
+CREATE TABLE users (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    address TEXT NOT NULL,
+    mobile VARCHAR(20) NOT NULL,
+    username VARCHAR(100) UNIQUE NOT NULL,
+    password VARCHAR(255) NOT NULL,
+    role VARCHAR(50) NOT NULL,
+    clinic_name VARCHAR(100) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+
+
+-- CREATE TABLE IF NOT EXISTS attendance_time_logs (
+--     id SERIAL PRIMARY KEY,
+--     staff_name VARCHAR(100) NOT NULL,
+--     role VARCHAR(50) NOT NULL,
+--     attendance_date DATE DEFAULT CURRENT_DATE,
+--     attendance_time TIME DEFAULT CURRENT_TIME,
+--     attendance_type VARCHAR(20) NOT NULL,
+--     clinic_name VARCHAR(20) NOT NULL
+--         CHECK (clinic_name IN ('Kalwa','Vashi','Byculla')),
+--     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+-- );
+
+CREATE TABLE IF NOT EXISTS attendance_outtime (
+    id SERIAL PRIMARY KEY,
+    staff_name VARCHAR(100) NOT NULL,
+    role VARCHAR(50) NOT NULL,
+    attendance_date DATE DEFAULT CURRENT_DATE,
+    out_time TIME DEFAULT CURRENT_TIME,
+    clinic_name VARCHAR(20) NOT NULL
+        CHECK (clinic_name IN ('Kalwa','Vashi','Byculla')),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);

@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Swaraj Clinic - Login</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Segoe UI',sans-serif;
+}
+
+body{
+    height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    background:linear-gradient(135deg,#0f172a,#1e3a8a,#2563eb);
+}
+
+.login-box{
+    width:420px;
+    background:#fff;
+    padding:35px;
+    border-radius:18px;
+    box-shadow:0 15px 35px rgba(0,0,0,.3);
+}
+
+.login-box h2{
+    text-align:center;
+    color:#2563eb;
+    margin-bottom:25px;
+}
+
+.user-box{
+    position:relative;
+    margin-bottom:25px;
+}
+
+.user-box input,
+.user-box select{
+    width:100%;
+    padding:12px;
+    border:1px solid #ccc;
+    border-radius:8px;
+    font-size:15px;
+    background:#f9f9f9;
+    outline:none;
+    transition:.3s;
+}
+
+.user-box input:focus,
+.user-box select:focus{
+    border-color:#2563eb;
+    background:#fff;
+    box-shadow:0 0 8px rgba(37,99,235,.3);
+}
+
+.user-box label{
+    position:absolute;
+    top:-10px;
+    left:10px;
+    background:#fff;
+    padding:0 5px;
+    font-size:12px;
+    color:#2563eb;
+    font-weight:600;
+}
+
+button{
+    width:100%;
+    padding:12px;
+    border:none;
+    border-radius:8px;
+    background:#2563eb;
+    color:#fff;
+    font-size:16px;
+    cursor:pointer;
+    transition:.3s;
+}
+
+button:hover{
+    background:#1d4ed8;
+}
+
+.error{
+    color:red;
+    text-align:center;
+    margin-bottom:15px;
+    font-weight:bold;
+}
+
+.hint{
+    text-align:center;
+    margin-top:15px;
+    color:#666;
+    font-size:14px;
+}
+
+.register-link{
+    text-align:center;
+    margin-top:15px;
+}
+
+.register-link a{
+    color:#2563eb;
+    text-decoration:none;
+    font-weight:600;
+}
+
+.register-link a:hover{
+    text-decoration:underline;
+}
+
+.center-name{
+    text-align:center;
+    color:#64748b;
+    margin-top:-15px;
+    margin-bottom:20px;
+    font-size:14px;
+}
+</style>
+
+</head>
+<body>
+
+<div class="login-box">
+
+    <h2>🏥 Swaraj Clinic Login</h2>
+    <div class="center-name">
+        Multi Clinic Management System
+    </div>
+
+    {{if .Error}}
+    <div class="error">{{.Error}}</div>
+    {{end}}
+
+    <form action="/login" method="POST">
+
+        <div class="user-box">
+            <select name="clinic_name" required>
+                <option value="">Select Clinic / Center</option>
+                <option value="Kalwa">🏥 Kalwa</option>
+                <option value="Vashi">🏥 Vashi</option>
+                <option value="Byculla">🏥 Byculla</option>
+            </select>
+            <label>Select Clinic</label>
+        </div>
+
+        <div class="user-box">
+            <input type="text" name="username" required>
+            <label>Username</label>
+        </div>
+
+        <div class="user-box">
+            <input type="password" name="password" required>
+            <label>Password</label>
+        </div>
+
+        <button type="submit">🔐 Login</button>
+
+    </form>
+
+    <div class="hint">
+        Select Clinic → Enter Username & Password
+    </div>
+
+    <div class="register-link">
+        <a href="/register">👤 Register New User</a>
+    </div>
+
+</div>
+
+</body>
+</html>

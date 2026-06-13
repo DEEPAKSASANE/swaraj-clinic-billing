@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Daily Collection</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial,sans-serif;
+}
+
+body{
+    background:#eef2ff;
+}
+
+.container{
+    max-width:800px;
+    margin:30px auto;
+    background:white;
+    padding:25px;
+    border-radius:15px;
+    box-shadow:0 5px 20px rgba(0,0,0,.2);
+}
+
+h1{
+    text-align:center;
+    color:#1d4ed8;
+    margin-bottom:20px;
+}
+
+input,textarea{
+    width:100%;
+    padding:12px;
+    margin:10px 0;
+    border:1px solid #ccc;
+    border-radius:8px;
+}
+
+.result{
+    margin-top:15px;
+    padding:15px;
+    background:#eff6ff;
+    border-radius:10px;
+    font-size:20px;
+    font-weight:bold;
+    color:#1d4ed8;
+}
+
+button{
+    width:100%;
+    padding:14px;
+    border:none;
+    background:#2563eb;
+    color:white;
+    border-radius:8px;
+    font-size:18px;
+    cursor:pointer;
+}
+
+button:hover{
+    background:#1d4ed8;
+}
+</style>
+
+</head>
+<body>
+
+{{template "nav.html" .}}
+
+<div class="container">
+
+<h1>💰 Daily Collection</h1>
+
+<form method="POST" action="/collection">
+
+<label>Date</label>
+<input type="date" name="collection_date" required>
+
+<label>Cash Amount</label>
+<input
+    type="number"
+    id="cash"
+    name="cash_amount"
+    step="0.01"
+    value="0"
+    oninput="calcCollection()">
+
+<label>Online Amount</label>
+<input
+    type="number"
+    id="online"
+    name="online_amount"
+    step="0.01"
+    value="0"
+    oninput="calcCollection()">
+
+<label>Expense Amount</label>
+<input
+    type="number"
+    id="expense"
+    name="expense_amount"
+    step="0.01"
+    value="0"
+    oninput="calcCollection()">
+
+<label>Expense Reason</label>
+<input
+    type="text"
+    name="expense_reason"
+    placeholder="Expense Reason">
+
+<label>Remark</label>
+<textarea
+    name="remark"
+    placeholder="Remark"></textarea>
+
+<label>Entered By</label>
+<input
+    type="text"
+    name="entered_by"
+    placeholder="Doctor / Sister">
+
+<div class="result">
+Total Collection: ₹<span id="total">0.00</span>
+</div>
+
+<div class="result">
+Final Balance: ₹<span id="balance">0.00</span>
+</div>
+
+<button type="submit">
+Save Collection
+</button>
+
+</form>
+
+</div>
+
+<script>
+
+function calcCollection(){
+
+    let cash =
+        parseFloat(document.getElementById("cash").value) || 0;
+
+    let online =
+        parseFloat(document.getElementById("online").value) || 0;
+
+    let expense =
+        parseFloat(document.getElementById("expense").value) || 0;
+
+    let total = cash + online;
+
+    let balance = total - expense;
+
+    document.getElementById("total").innerText =
+        total.toFixed(2);
+
+    document.getElementById("balance").innerText =
+        balance.toFixed(2);
+}
+
+window.onload = calcCollection;
+
+</script>
+
+</body>
+</html>

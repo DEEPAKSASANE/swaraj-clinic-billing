@@ -1,0 +1,66 @@
+body {
+  font-family: 'Segoe UI', sans-serif;
+  background: #f4f4f4;
+  padding: 20px;
+}
+
+.invoice-box {
+  max-width: 800px;
+  margin: auto;
+  padding: 30px;
+  background: #fff;
+  border: 1px solid #ddd;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.15);
+  color: #000;
+  border-radius: 8px;
+}
+
+table {
+  width: 100%;
+  line-height: 24px;
+  border-collapse: collapse;
+}
+
+table tr.clinic-header td {
+  text-align: center;
+  font-size: 14px;
+  line-height: 20px;
+  padding-bottom: 10px;
+}
+
+table tr.customer-details td {
+  padding: 10px 0;
+  vertical-align: top;
+  font-size: 14px;
+}
+
+table tr.heading th {
+  background: #eee;
+  border: 1px solid #ccc;
+  padding: 8px;
+  font-weight: bold;
+}
+
+table tr.item td {
+  border: 1px solid #ddd;
+  padding: 8px;
+}
+
+table tr.total td {
+  border-top: 2px solid #000;
+  font-weight: bold;
+  padding: 8px;
+}
+
+p.terms {
+  font-size: 13px;
+  margin-top: 20px;
+  border-top: 1px dashed #aaa;
+  padding-top: 10px;
+}
+
+p.sign {
+  text-align: right;
+  margin-top: 40px;
+  font-size: 14px;
+}
