@@ -1,0 +1,109 @@
+CREATE TABLE users (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(255),
+    address TEXT,
+    mobile VARCHAR(20),
+    username VARCHAR(100),
+    password VARCHAR(255),
+    role VARCHAR(50),
+    clinic_name VARCHAR(255),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE invoices12 (
+    id SERIAL PRIMARY KEY,
+    customer_name VARCHAR(255),
+    mobile VARCHAR(20),
+    age INTEGER,
+    gender VARCHAR(20),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    address TEXT,
+    clinic_name VARCHAR(255)
+);
+
+CREATE TABLE tests12 (
+    id SERIAL PRIMARY KEY,
+    invoice_id INTEGER,
+    test_name VARCHAR(255),
+    price NUMERIC(10,2),
+    discount NUMERIC(10,2),
+    total_amount NUMERIC(10,2),
+    total_amount_words TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    clinic_name VARCHAR(255),
+    FOREIGN KEY (invoice_id) REFERENCES invoices12(id) ON DELETE CASCADE
+);
+
+CREATE TABLE attendance_intime (
+    id SERIAL PRIMARY KEY,
+    staff_name VARCHAR(255),
+    role VARCHAR(50),
+    attendance_date DATE,
+    in_time TIME,
+    clinic_name VARCHAR(255),
+    selfie_path VARCHAR(500),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE attendance_outtime (
+    id SERIAL PRIMARY KEY,
+    staff_name VARCHAR(255),
+    role VARCHAR(50),
+    attendance_date DATE,
+    out_time TIME,
+    clinic_name VARCHAR(255),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    selfie_path VARCHAR(500),
+    out_image TEXT
+);
+
+CREATE TABLE attendance_time_logs (
+    id SERIAL PRIMARY KEY,
+    staff_name VARCHAR(255),
+    role VARCHAR(50),
+    attendance_date DATE,
+    attendance_time TIME,
+    attendance_type VARCHAR(20),
+    clinic_name VARCHAR(255),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE daily_collections (
+    id SERIAL PRIMARY KEY,
+    collection_date DATE,
+    cash_amount NUMERIC(12,2),
+    online_amount NUMERIC(12,2),
+    expense_amount NUMERIC(12,2),
+    expense_reason TEXT,
+    remark TEXT,
+    entered_by VARCHAR(255),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    clinic_name VARCHAR(255)
+);
+
+CREATE TABLE daily_collections_online (
+    id SERIAL PRIMARY KEY,
+    collection_date DATE,
+    online_amount NUMERIC(12,2),
+    expense_amount NUMERIC(12,2),
+    remark TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    clinic_name VARCHAR(255)
+);
+
+SELECT
+    table_name,
+    column_name,
+    data_type
+FROM information_schema.columns
+WHERE table_name IN (
+    'users',
+    'invoices12',
+    'tests12',
+    'attendance_intime',
+    'attendance_outtime',
+    'attendance_time_logs',
+    'daily_collections',
+    'daily_collections_online'
+)
+ORDER BY table_name, ordinal_position;
